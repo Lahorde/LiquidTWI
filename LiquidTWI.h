@@ -84,6 +84,10 @@ public:
 
 	void createChar(uint8_t, uint8_t[]);
 	void setCursor(uint8_t, uint8_t); 
+	void rowSetCols(uint8_t arg_u8_line, char arg_s8_char, uint8_t arg_u8_nbChars);
+	void rowSet(uint8_t arg_u8_line, char arg_s8_char);
+	void lcdSet(char arg_s8_char);
+
 #if ARDUINO >= 100
 	virtual size_t write(uint8_t);
 #else
@@ -98,6 +102,7 @@ private:
 	uint8_t _displaycontrol;
 	uint8_t _displaymode;
 	uint8_t _numlines,_currline;
+	uint8_t _numCols;
 	uint8_t _i2cAddr;
 };
 

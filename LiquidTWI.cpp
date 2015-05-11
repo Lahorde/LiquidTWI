@@ -147,6 +147,8 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 	_numlines = lines;
 	_currline = 0;
 
+	_numCols = cols;
+
 	// for some 1 line displays you can select a 10 pixel high font
 	if ((dotsize != 0) && (lines == 1)) {
 		_displayfunction |= LCD_5x10DOTS;
@@ -211,6 +213,30 @@ void LiquidTWI::setCursor(uint8_t col, uint8_t row)
 	int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 	if ( row > _numlines ) row = _numlines - 1;    // we count rows starting w/0
 	command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+}
+
+void LiquidTWI::rowSetCols(uint8_t arg_u8_line, char arg_s8_char, uint8_t arg_u8_nbChars)
+{
+	setCursor(0, arg_u8_line);
+	for(uint8_t loc_u8_colIndex = 0; loc_u8_colIndex < arg_u8_nbChars; loc_u8_colIndex++)
+	{
+		print(arg_s8_char);
+	}
+	setCursor(0, arg_u8_line);
+}
+
+void LiquidTWI::rowSet(uint8_t arg_u8_line, char arg_s8_char)
+{
+	rowSetCols(arg_u8_line, arg_s8_char, _numCols);
+}
+void LiquidTWI::lcdSet(char arg_s8_char)
+{
+	setCursor(0, 0);
+	for(uint8_t loc_u8_rowIndex = 0; loc_u8_rowIndex < _numlines; loc_u8_rowIndex++)
+	{
+		setCursor(0, loc_u8_rowIndex);
+		rowSet(loc_u8_rowIndex, arg_s8_char);
+	}
 }
 
 // Turn the display on/off (quickly)
